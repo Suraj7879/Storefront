@@ -36,6 +36,14 @@ def wish_birthday(request):
     # queryset = Product.objects.filter(Q(inventory__lt = 10) | Q(unit_price__lt = 20))
 
     #F Object
-    queryset = Product.objects.filter(inventory = F('collection__id'))
+    # queryset = Product.objects.filter(inventory = F('collection__id'))
+
+    #Sorting 
+    # queryset = Product.objects.order_by('unit_price', '-title').reverse()
+    # queryset = Product.objects.filter(collection__id = 1).order_by('unit_price')
+    # product = Product.objects.filter.order_by('unit_price')[0]
+    # ===
+    #queryset = Product.objects.earliest('unit_price')
+    #queryset = Product.objects.latest('unit_price')
 
     return render(request, 'index.html', {"name": "Suraj", "products": list(queryset)})
