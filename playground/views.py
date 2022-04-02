@@ -9,6 +9,8 @@ def wish_birthday(request):
     # for product in query_set:
     #     print(product)
 
+    #product = Product.objects.count()
+
     # try:
     #     product = Product.objects.get(pk=0)
     # except:
