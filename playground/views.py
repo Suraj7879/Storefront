@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, F
-from store.models import Product, OrderItem
+from store.models import Product, OrderItem, Order
 import datetime
 
 
@@ -49,6 +49,14 @@ def wish_birthday(request):
     #Selecting Fields to Query
     # queryset = Product.objects.values('id', 'title', 'collection__id')
     ##Select products that have been ordered and sort them by title
-    queryset = Product.objects.filter(id__in = OrderItem.objects.values('product_id').distinct()).order_by('title')
+    # queryset = Product.objects.filter(id__in = OrderItem.objects.values('product_id').distinct()).order_by('title')
 
-    return render(request, 'index.html', {"name": "Suraj", "products": list(queryset)})
+    #select_related
+    # queryset = Product.objects.select_related('collection').all()
+
+    #prefetch_related
+    # queryset = Product.objects.prefetch_related('promotions').select_related('collection').all()
+
+    queryset = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
+
+    return render(request, 'index.html', {"name": "Suraj", "orders": list(queryset)})
