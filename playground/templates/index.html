@@ -14,7 +14,6 @@
         {% endif %}
         <ul>
             {% for order in orders%}
-            <!-- <li>{{ product.title }} - {{ product.collection.title }}</li> -->
             <li>{{ order.id }} - {{ order.customer.first_name }}</li>
             {% endfor %}
         </ul>
