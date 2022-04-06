@@ -57,6 +57,7 @@ def wish_birthday(request):
     #prefetch_related
     # queryset = Product.objects.prefetch_related('promotions').select_related('collection').all()
 
+
     queryset = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
 
     return render(request, 'index.html', {"name": "Suraj", "orders": list(queryset)})
