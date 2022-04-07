@@ -2,7 +2,7 @@ from os import stat
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q, F, Value, Func
+from django.db.models import Q, F, Value, Func, ExpressionWrapper, DecimalField
 from django.db.models.aggregates import Count, Min, Max, Avg, Sum
 from django.db.models.functions import Concat
 from store.models import Product, OrderItem, Order, Customer
@@ -72,8 +72,15 @@ def wish_birthday(request):
     #     #CONCAT
     #     full_name = Func(F('first_name'), Value(' ') , F('last_name'), function='CONCAT'))
     ##Alternative
-    queryset = Customer.objects.annotate(
-        #CONCAT
-        full_name = Concat('first_name', Value(' ') , 'last_name'))
+    # queryset = Customer.objects.annotate(
+    #     #CONCAT
+    #     full_name = Concat('first_name', Value(' ') , 'last_name'))
+
+    # queryset = Customer.objects.annotate(
+    #     order_count = Count('order')
+    # )
+
+    discounted_price = ExpressionWrapper(F('unit_price') * 0.8, output_field = DecimalField())
+    queryset = Product.objects.annotate(discounted_price = discounted_price)
 
     return render(request, 'index.html', {"name": "Suraj", "col": list(queryset)})
