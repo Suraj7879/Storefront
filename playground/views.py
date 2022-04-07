@@ -1,7 +1,9 @@
+from os import stat
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, F
+from django.db.models.aggregates import Count, Min, Max, Avg, Sum
 from store.models import Product, OrderItem, Order
 import datetime
 
@@ -58,6 +60,8 @@ def wish_birthday(request):
     # queryset = Product.objects.prefetch_related('promotions').select_related('collection').all()
 
 
-    queryset = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
+    # queryset = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
 
-    return render(request, 'index.html', {"name": "Suraj", "orders": list(queryset)})
+    stats = Product.objects.aggregate(count = Count('id'), min = Min('unit_price'), max = Max('unit_price'), avg = Avg('unit_price'), sum = Sum('unit_price'))
+
+    return render(request, 'index.html', {"name": "Suraj", "stats": stats})
