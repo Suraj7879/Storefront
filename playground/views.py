@@ -2,8 +2,9 @@ from os import stat
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q, F, Value
+from django.db.models import Q, F, Value, Func
 from django.db.models.aggregates import Count, Min, Max, Avg, Sum
+from django.db.models.functions import Concat
 from store.models import Product, OrderItem, Order, Customer
 import datetime
 
@@ -65,6 +66,14 @@ def wish_birthday(request):
     # stats = Product.objects.aggregate(count = Count('id'), min = Min('unit_price'), max = Max('unit_price'), avg = Avg('unit_price'), sum = Sum('unit_price'))
 
     # queryset = Customer.objects.annotate(is_new = Value(True))
-    queryset = Customer.objects.annotate(new_id = F('id') + 1)
+    # queryset = Customer.objects.annotate(new_id = F('id') + 1)
+
+    # queryset = Customer.objects.annotate(
+    #     #CONCAT
+    #     full_name = Func(F('first_name'), Value(' ') , F('last_name'), function='CONCAT'))
+    ##Alternative
+    queryset = Customer.objects.annotate(
+        #CONCAT
+        full_name = Concat('first_name', Value(' ') , 'last_name'))
 
     return render(request, 'index.html', {"name": "Suraj", "col": list(queryset)})
