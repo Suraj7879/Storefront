@@ -2,6 +2,7 @@ from os import stat
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Q, F, Value, Func, ExpressionWrapper, DecimalField
 from django.db.models.aggregates import Count, Min, Max, Avg, Sum
 from django.db.models.functions import Concat
@@ -10,6 +11,9 @@ import datetime
 
 
 # Create your views here.
+
+#If you want to make complete function atomic, you can use the 
+# @transaction.atomic 
 def wish_birthday(request):
     # query_set = Product.objects.all()
     # for product in query_set:
@@ -94,5 +98,19 @@ def wish_birthday(request):
     # Collection.objects.filter(pk = 1).update(...)
     # #To Delete Objects
     # Collection.objects.filter(pk = 1).delete()
-    
+
+
+    # #Transactions
+    #     with transaction.atomic():
+    #         order = Order()
+    #         order.customer_id = 1
+    #         order.save()
+
+    #         item = OrderItem()
+    #         item.order = order
+    #         item.product_id = 1
+    #         item.quantity = 1
+    #         item.unit_price = 10
+    #         item.save()
+
     return render(request, 'index.html', {"name": "Suraj", "col": list(queryset)})
