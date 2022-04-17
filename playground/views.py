@@ -80,7 +80,19 @@ def wish_birthday(request):
     #     order_count = Count('order')
     # )
 
-    discounted_price = ExpressionWrapper(F('unit_price') * 0.8, output_field = DecimalField())
-    queryset = Product.objects.annotate(discounted_price = discounted_price)
+    # discounted_price = ExpressionWrapper(F('unit_price') * 0.8, output_field = DecimalField())
+    # queryset = Product.objects.annotate(discounted_price = discounted_price)
 
+    # collection = Collection()
+    # collection.name = 'Video Games'
+    # collection.featured_product = Product(pk=1)
+    # collection.save()
+
+    # collection = Collection.objects.create(name='Video Games', featured_product_id=1)
+
+    #To Update Objects
+    # Collection.objects.filter(pk = 1).update(...)
+    # #To Delete Objects
+    # Collection.objects.filter(pk = 1).delete()
+    
     return render(request, 'index.html', {"name": "Suraj", "col": list(queryset)})
